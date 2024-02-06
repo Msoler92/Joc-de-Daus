@@ -1,8 +1,11 @@
 package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.services;
 
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.GameDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.PlayerNotFoundException;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import org.modelmapper.ModelMapper;
@@ -17,7 +20,7 @@ public class PlayerServiceImpl implements PlayerService{
     @Autowired
     PlayerRepository playerRepository;
     @Autowired
-    GameService gameService;
+    GameRepository gameRepository;
 
     @Override
     public PlayerDTO getById(int id) {
@@ -48,6 +51,11 @@ public class PlayerServiceImpl implements PlayerService{
         return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
+    public List<PlayerDTO> getAllWithAverages() {
+        List<GameEntity> games = gameRepository.findAll();
+        return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
     @Override
     public double getAverageRanking() {
         double average;
@@ -55,7 +63,7 @@ public class PlayerServiceImpl implements PlayerService{
         if (playerDTOList.isEmpty()) {
             average = 0;
         } else {
-            average = playerDTOList.stream().mapToDouble(PlayerDTO::getVictoryRate).sum();
+            average = playerDTOList.stream().mapToDouble(PlayerDTO::getVictoryRate).sum()/playerDTOList.size();
         }
         return average;
     }

@@ -31,6 +31,7 @@ public class GameServiceImpl implements GameService{
         game.play();
         return entityToDTO(gameRepository.save(game));
     }
+
     @Override
     public List<GameDTO> getByPlayerId(int playerId) {
         return gameRepository.findByPlayerId(playerId).stream().map(this::entityToDTO).collect(Collectors.toList());
