@@ -60,7 +60,7 @@ public class GameServiceImpl implements GameService{
         return average;
     }
     //TODO fix
-    public GameDTO entityToDTO(GameEntity entity) {
+    private GameDTO entityToDTO(GameEntity entity) {
         ModelMapper mapper = new ModelMapper();
         GameDTO dto = new GameDTO();
 
@@ -68,7 +68,7 @@ public class GameServiceImpl implements GameService{
         dto.setVictory(entity.getDie1() + entity.getDie2() == 7); //TODO temporary working solution. Use TypeMapper.
         return dto;
     }
-    public GameEntity dtoToEntity(GameDTO dto) {
+    private GameEntity dtoToEntity(GameDTO dto) {
         ModelMapper mapper = new ModelMapper();
         GameEntity entity = new GameEntity();
 

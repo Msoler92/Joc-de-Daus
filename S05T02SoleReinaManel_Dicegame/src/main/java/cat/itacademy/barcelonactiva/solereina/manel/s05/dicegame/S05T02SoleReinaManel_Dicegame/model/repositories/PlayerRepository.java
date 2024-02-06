@@ -4,5 +4,4 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Integer> {
-
 }

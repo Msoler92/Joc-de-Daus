@@ -3,13 +3,17 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.PlayerDTO;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EmptyPlayerListException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.PlayerNotFoundException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,11 +53,6 @@ public class PlayerServiceImpl implements PlayerService{
         return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
-    public List<PlayerDTO> getAllWithAverages() {
-        List<GameEntity> games = gameRepository.findAll();
-        return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
-
     @Override
     public double getAverageRanking() {
         double average;
@@ -68,12 +67,15 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public PlayerDTO getLoser() {
-        return null;
+        List<PlayerDTO> players = getAll();
+        return players.stream().min(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(EmptyPlayerListException::new); //TODO Review throws clause
     }
 
+    //TODO Take into account ties for winner and loser?
     @Override
     public PlayerDTO getWinner() {
-        return null;
+        List<PlayerDTO> players = getAll();
+        return players.stream().max(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(EmptyPlayerListException::new); //TODO Review throws clause
     }
 
     private double getPlayerAverage(int playerId) { //TODO Dirty. Repeated code from GameService. Multiple calls. Fix with two-way OneToMany-ManyToOne?
