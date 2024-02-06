@@ -27,7 +27,7 @@ public class GameRESTController {
 
     @GetMapping("/players/{id}/games")
     public ResponseEntity<List<GameDTO>> getGames(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(gameService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(gameService.getByPlayerId(id), HttpStatus.OK);
     }
 
 

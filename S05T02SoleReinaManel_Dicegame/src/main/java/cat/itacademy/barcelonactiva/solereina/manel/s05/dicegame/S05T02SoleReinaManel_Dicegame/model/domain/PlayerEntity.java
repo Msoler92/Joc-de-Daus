@@ -15,9 +15,9 @@ public class PlayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int pk_PlayerId;
-    @Column(name = "playerName")
+    @Column(name = "player_name")
     private String playerName;
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     private Date creationDate;
 
     public PlayerEntity() {
@@ -28,6 +28,6 @@ public class PlayerEntity {
         this.playerName = playerName;
         this.creationDate = new Date();
     }
-
+    //TODO Fix date initialization
 
 }

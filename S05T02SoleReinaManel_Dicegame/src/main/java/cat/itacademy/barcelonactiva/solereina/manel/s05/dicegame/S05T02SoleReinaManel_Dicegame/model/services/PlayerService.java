@@ -9,7 +9,7 @@ public interface PlayerService {
     PlayerDTO getById(int id);
     PlayerDTO save(PlayerDTO player);
     PlayerDTO update(PlayerDTO player);
-    List<PlayerDTO> getALl();
+    List<PlayerDTO> getAll();
     double getAverageRanking();
     PlayerDTO getLoser();
     PlayerDTO getWinner();
