@@ -65,6 +65,7 @@ public class GameServiceImpl implements GameService{
         GameDTO dto = new GameDTO();
 
         mapper.map(entity, dto);
+        dto.setVictory(entity.getDie1() + entity.getDie2() == 7); //TODO temporary working solution. Use TypeMapper.
         return dto;
     }
     public GameEntity dtoToEntity(GameDTO dto) {

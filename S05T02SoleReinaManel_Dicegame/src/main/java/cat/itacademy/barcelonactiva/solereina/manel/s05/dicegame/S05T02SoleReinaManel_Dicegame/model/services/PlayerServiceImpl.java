@@ -91,11 +91,13 @@ public class PlayerServiceImpl implements PlayerService{
     }
     private PlayerDTO entityToDTO(PlayerEntity entity) {
         ModelMapper mapper = new ModelMapper();
-        TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
-        propertyMapper.addMapping(player -> getPlayerAverage(player.getId()), PlayerDTO::setVictoryRate);
+        //TODO fix
+        //TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
+        //propertyMapper.addMapping(player -> getPlayerAverage(player.getId()), PlayerDTO::setVictoryRate);
         PlayerDTO dto = new PlayerDTO();
 
         mapper.map(entity, dto);
+        dto.setVictoryRate(getPlayerAverage(entity.getId())); //TODO remove when above is fixed
         return dto;
     }
 
