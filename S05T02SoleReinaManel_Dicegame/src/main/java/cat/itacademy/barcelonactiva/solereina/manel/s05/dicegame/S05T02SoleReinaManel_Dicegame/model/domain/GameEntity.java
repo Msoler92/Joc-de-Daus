@@ -1,6 +1,5 @@
 package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain;
 
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.GameUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int pk_GameId;
+    private int id;
     //@Column(name = "player_id")
     //private int playerId; //TODO delete
     @Column(name = "die_one")

@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class PlayerDTO {
-    private int pk_PlayerId;
+    private int id;
     private String playerName;
     private Date creationDate;
     private double victoryRate;

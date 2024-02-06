@@ -3,7 +3,6 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -15,7 +14,7 @@ import java.util.Date;
 public class PlayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int pk_PlayerId;
+    private int id;
     @Column(name = "player_name")
     private String playerName;
     @Column(name = "creation_date")

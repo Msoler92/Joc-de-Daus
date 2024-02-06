@@ -2,12 +2,10 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.GameDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.PlayerNotFoundException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public PlayerDTO update(PlayerDTO player) {
-        getById(player.getPk_PlayerId());
+        getById(player.getId());
         return entityToDTO(
                 playerRepository.save(
                         dtoToEntity(player)));
@@ -78,18 +76,30 @@ public class PlayerServiceImpl implements PlayerService{
         return null;
     }
 
-    //TODO fix
-    public PlayerDTO entityToDTO(PlayerEntity entity) {
+    private double getPlayerAverage(int playerId) { //TODO Dirty. Repeated code from GameService. Multiple calls. Fix with two-way OneToMany-ManyToOne?
+        double average;
+        List<GameEntity> games = gameRepository.findByPlayerId(playerId);
+
+        //TODO Handle empty game list differently?
+        if (games.isEmpty()) {
+            average = 0;
+        } else {
+            average = games.stream().filter(GameEntity::validateVictory).count();
+            average /= games.size();
+        }
+        return average;
+    }
+    private PlayerDTO entityToDTO(PlayerEntity entity) {
         ModelMapper mapper = new ModelMapper();
-        // TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
-        //propertyMapper.addMapping(PlayerEntity::getTimestamp, PlayerDTO::setSuccessRate);
+        TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
+        propertyMapper.addMapping(player -> getPlayerAverage(player.getId()), PlayerDTO::setVictoryRate);
         PlayerDTO dto = new PlayerDTO();
 
         mapper.map(entity, dto);
         return dto;
     }
 
-    public PlayerEntity dtoToEntity(PlayerDTO dto) {
+    private PlayerEntity dtoToEntity(PlayerDTO dto) {
         ModelMapper mapper = new ModelMapper();
         PlayerEntity entity = new PlayerEntity();
 

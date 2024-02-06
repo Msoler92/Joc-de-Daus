@@ -1,6 +1,5 @@
 package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto;
 
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,8 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GameDTO {
-    private int pk_GameId;
-    private int fk_PlayerId;
+    private int id;
+    private int playerId;
     private int die1;
     private int die2;
     private boolean victory;

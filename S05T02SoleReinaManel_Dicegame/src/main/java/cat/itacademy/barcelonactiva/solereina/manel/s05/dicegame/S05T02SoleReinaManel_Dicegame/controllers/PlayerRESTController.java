@@ -26,7 +26,7 @@ public class PlayerRESTController {
 
     @GetMapping("/players")
     public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
-        return new ResponseEntity<>(playerService.getALl(), HttpStatus.OK);
+        return new ResponseEntity<>(playerService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/players/ranking")
