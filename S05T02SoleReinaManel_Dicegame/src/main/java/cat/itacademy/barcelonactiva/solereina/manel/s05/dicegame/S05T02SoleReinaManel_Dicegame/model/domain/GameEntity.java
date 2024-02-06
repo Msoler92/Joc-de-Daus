@@ -17,8 +17,6 @@ public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    //@Column(name = "player_id")
-    //private int playerId; //TODO delete
     @Column(name = "die_one")
     private int die1;
     @Column(name = "die_two")
@@ -30,11 +28,6 @@ public class GameEntity {
     @JsonIgnore
     private PlayerEntity player;
 
-/*
-    public GameEntity(int playerId) {
-        this.playerId = playerId;
-    }
-*/
     public GameEntity(PlayerEntity player) {
         this.player = player;
     }
@@ -45,6 +38,7 @@ public class GameEntity {
         return validateVictory(this);
     }
 
+    //TODO standardize victory condition across code
     public static boolean validateVictory(GameEntity game) {
         return game.getDie1() + game.getDie2() == 7;
     }

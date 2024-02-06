@@ -3,6 +3,7 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.GameDTO;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EntityNotFoundException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
 import org.modelmapper.ModelMapper;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +23,8 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public GameDTO playGame(int playerID) {
-        Optional<PlayerEntity> player = playerRepository.findById(playerID);
-        if (player.isEmpty()) {
-            //TODO throw exception
-        }
-        GameEntity game = new GameEntity(player.get());
+        PlayerEntity player = playerRepository.findById(playerID).orElseThrow(() -> new EntityNotFoundException("Id not found."));
+        GameEntity game = new GameEntity(player);
         game.play();
         return entityToDTO(gameRepository.save(game));
     }

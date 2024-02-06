@@ -4,18 +4,15 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EmptyPlayerListException;
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.PlayerNotFoundException;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EntityNotFoundException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
-import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class PlayerServiceImpl implements PlayerService{
@@ -26,11 +23,7 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public PlayerDTO getById(int id) {
-        Optional<PlayerEntity> playerData = playerRepository.findById(id);
-        if (playerData.isEmpty()) {
-            throw new PlayerNotFoundException("Id not found.");
-        }
-        return entityToDTO(playerData.get());
+        return entityToDTO(playerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Id not found.")));
     }
     //TODO verify player exists or not
     @Override
@@ -47,7 +40,6 @@ public class PlayerServiceImpl implements PlayerService{
                 playerRepository.save(
                         dtoToEntity(player)));
     }
-    //TODO include average scores (through DTO? -> CUSTOM QUERY ON PLAYER REPO -> Modify PlayerEntity and GameEntity with one-to-many relation (eugh))
     @Override
     public List<PlayerDTO> getAll() {
         return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
