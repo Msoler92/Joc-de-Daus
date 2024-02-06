@@ -38,7 +38,6 @@ public class GameEntity {
         return validateVictory(this);
     }
 
-    //TODO standardize victory condition across code
     public static boolean validateVictory(GameEntity game) {
         return game.getDie1() + game.getDie2() == 7;
     }

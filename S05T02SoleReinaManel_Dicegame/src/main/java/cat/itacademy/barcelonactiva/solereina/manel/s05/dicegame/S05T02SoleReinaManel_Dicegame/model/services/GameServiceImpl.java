@@ -47,7 +47,6 @@ public class GameServiceImpl implements GameService{
         double average;
         List<GameEntity> games = gameRepository.findByPlayerId(playerID);
 
-        //TODO Handle empty game list differently?
         if (games.isEmpty()) {
             average = 0;
         } else {

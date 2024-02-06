@@ -28,6 +28,5 @@ public class PlayerEntity {
         this.playerName = playerName;
         this.creationDate = new Date();
     }
-    //TODO Fix date initialization
 
 }
