@@ -5,6 +5,7 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.security.dto.SignUpRequest;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.security.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
+    @Autowired
     private AuthenticationService authenticationService;
 
     @PostMapping("/signup")

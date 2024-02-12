@@ -55,10 +55,9 @@ public class JwtServiceImpl implements JwtService{
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().verifyWith(getSigningKey()).build().parseUnsecuredClaims(token)
-                .getPayload(); //TODO Verify due to changes since v12
+        return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token)
+                .getPayload();
     }
-
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
