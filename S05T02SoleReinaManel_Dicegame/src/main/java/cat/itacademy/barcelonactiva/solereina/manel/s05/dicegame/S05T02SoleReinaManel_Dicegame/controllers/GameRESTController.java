@@ -2,6 +2,7 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.GameDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.services.GameService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,8 @@ public class GameRESTController {
     GameService gameService;
 
     @PostMapping("/players/{id}/games")
-    public ResponseEntity<GameDTO> playGame(@PathVariable("id") Integer id) {
+    public ResponseEntity<GameDTO> playGame(@PathVariable("id") Integer id, HttpServletRequest request) {
+        request.getHeader("username");
         return new ResponseEntity<>(gameService.playGame(id), HttpStatus.CREATED);
     }
 
