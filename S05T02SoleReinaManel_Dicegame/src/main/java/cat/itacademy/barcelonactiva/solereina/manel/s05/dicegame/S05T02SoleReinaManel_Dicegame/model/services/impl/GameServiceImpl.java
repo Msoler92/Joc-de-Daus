@@ -1,4 +1,4 @@
-package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.services;
+package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.services.impl;
 
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.GameEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
@@ -6,6 +6,8 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EntityNotFoundException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.repositories.PlayerRepository;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.services.GameService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GameServiceImpl implements GameService{
+public class GameServiceImpl implements GameService {
     @Autowired
     private GameRepository gameRepository;
 
@@ -38,6 +40,7 @@ public class GameServiceImpl implements GameService{
         GameEntity entity = dtoToEntity(dto);
         return entityToDTO(gameRepository.save(entity));
     }
+    @Transactional
     @Override
     public void deleteByPlayer(int playerID) {
         gameRepository.deleteByPlayerId(playerID);
