@@ -35,7 +35,10 @@ public class SecurityConfig {
                 //.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authHttp -> authHttp
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**"))
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**"),
+                                new AntPathRequestMatcher("/swagger-ui/**"),
+                                new AntPathRequestMatcher("/swagger-resources/*"),
+                                new AntPathRequestMatcher("/v3/api-docs/**"))
                         .permitAll().anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
