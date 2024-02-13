@@ -64,14 +64,14 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public PlayerDTO getLoser() {
         List<PlayerDTO> players = getAll();
-        return players.stream().min(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(EmptyPlayerListException::new); //TODO Review throws clause
+        return players.stream().min(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(() -> new EmptyPlayerListException("No players registered yet."));
     }
 
     //TODO Take into account ties for winner and loser?
     @Override
     public PlayerDTO getWinner() {
         List<PlayerDTO> players = getAll();
-        return players.stream().max(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(EmptyPlayerListException::new); //TODO Review throws clause
+        return players.stream().max(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(() -> new EmptyPlayerListException("No players registered yet."));
     }
 
     private double getPlayerAverage(int playerId) { //TODO Dirty. Repeated code from GameService. Multiple calls. Fix with two-way OneToMany-ManyToOne?
@@ -80,7 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         //TODO Handle empty game list differently?
         if (games.isEmpty()) {
-            average = 0;
+            throw new EmptyPlayerListException("No players registered yet.");
         } else {
             average = games.stream().filter(GameEntity::validateVictory).count();
             average /= games.size();

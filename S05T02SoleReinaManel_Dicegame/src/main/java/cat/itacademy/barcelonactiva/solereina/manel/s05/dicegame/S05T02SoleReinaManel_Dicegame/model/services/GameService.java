@@ -9,6 +9,5 @@ public interface GameService {
     List<GameDTO> getByPlayerId(int playerID);
     GameDTO save(GameDTO game);
     void deleteByPlayer(int playerID);
-    double getPlayerAverage(int playerID);
 
 }

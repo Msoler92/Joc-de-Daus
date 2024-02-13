@@ -45,19 +45,7 @@ public class GameServiceImpl implements GameService {
     public void deleteByPlayer(int playerID) {
         gameRepository.deleteByPlayerId(playerID);
     }
-    @Override
-    public double getPlayerAverage(int playerID) {
-        double average;
-        List<GameEntity> games = gameRepository.findByPlayerId(playerID);
 
-        if (games.isEmpty()) {
-            average = 0;
-        } else {
-            average = games.stream().filter(GameEntity::validateVictory).count();
-            average /= games.size();
-        }
-        return average;
-    }
     //TODO fix
     private GameDTO entityToDTO(GameEntity entity) {
         ModelMapper mapper = new ModelMapper();
