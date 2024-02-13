@@ -29,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (request.getEmail().isEmpty() || request.getPassword().isEmpty()) {
             throw new IllegalArgumentException("User email and password cannot be null");
         }
-        userRepository.findByEmail(request.getEmail())
+        userRepository.findById(request.getEmail())
                 .ifPresent(user -> {
                     throw new EntityAlreadyExistsException("Email is already registered:" + user.getEmail());
                 });
@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserEntity user = userRepository.findByEmail(request.getEmail())
+        UserEntity user = userRepository.findById(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
         String jwt = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwt).build();

@@ -32,5 +32,4 @@ public class GameRESTController {
         return new ResponseEntity<>(gameService.getByPlayerId(id), HttpStatus.OK);
     }
 
-
 }
