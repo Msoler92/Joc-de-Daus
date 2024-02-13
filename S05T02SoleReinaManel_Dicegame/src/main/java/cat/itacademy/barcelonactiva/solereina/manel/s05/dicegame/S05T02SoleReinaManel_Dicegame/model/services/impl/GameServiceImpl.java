@@ -24,8 +24,8 @@ public class GameServiceImpl implements GameService {
     private PlayerRepository playerRepository;
 
     @Override
-    public GameDTO playGame(int playerID) {
-        PlayerEntity player = playerRepository.findById(playerID).orElseThrow(() -> new EntityNotFoundException("Id not found."));
+    public GameDTO playGame(int playerId) {
+        PlayerEntity player = playerRepository.findById(playerId).orElseThrow(() -> new EntityNotFoundException("Id not found."));
         GameEntity game = new GameEntity(player);
         game.play();
         return entityToDTO(gameRepository.save(game));

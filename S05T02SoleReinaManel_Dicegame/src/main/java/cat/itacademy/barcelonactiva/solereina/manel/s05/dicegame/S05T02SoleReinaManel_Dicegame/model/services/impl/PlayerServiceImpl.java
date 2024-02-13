@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +31,7 @@ public class PlayerServiceImpl implements PlayerService {
     //TODO verify player exists or not
     @Override
     public PlayerDTO save(PlayerDTO player) {
+        player.setCreationDate(LocalDate.now());
         return entityToDTO(
                 playerRepository.save(
                         dtoToEntity(player)));
@@ -92,6 +95,7 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerDTO dto = new PlayerDTO();
 
         mapper.map(entity, dto);
+        dto.setCreationDate(entity.getCreationDate().toLocalDate());
         dto.setVictoryRate(getPlayerAverage(entity.getId())); //TODO remove when above is fixed
         return dto;
     }
@@ -101,6 +105,7 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerEntity entity = new PlayerEntity();
 
         mapper.map(dto, entity);
+        entity.setCreationDate(Date.valueOf(dto.getCreationDate()));
         return entity;
     }
 }
