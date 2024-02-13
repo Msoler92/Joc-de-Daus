@@ -3,10 +3,12 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "players")
 public class PlayerEntity {
@@ -17,12 +19,5 @@ public class PlayerEntity {
     private String playerName;
     @Column(name = "creation_date")
     private Date creationDate;
-
-    public PlayerEntity() {
-        this.playerName = PlayerUtils.DEFAULT_NAME;
-    }
-    public PlayerEntity(String playerName) {
-        this.playerName = playerName;
-    }
 
 }

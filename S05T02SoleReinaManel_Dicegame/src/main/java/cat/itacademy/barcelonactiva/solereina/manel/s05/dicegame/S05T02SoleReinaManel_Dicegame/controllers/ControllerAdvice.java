@@ -29,4 +29,5 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<String> handleEmptyPlayerList(EmptyPlayerListException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
     }
+
 }

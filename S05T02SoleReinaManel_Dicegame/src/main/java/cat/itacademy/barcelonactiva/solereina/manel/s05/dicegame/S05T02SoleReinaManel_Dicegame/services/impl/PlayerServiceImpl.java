@@ -4,7 +4,9 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.domain.PlayerEntity;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EmptyPlayerListException;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EntityAlreadyExistsException;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.exceptions.EntityNotFoundException;
+import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.model.utils.PlayerUtils;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.PlayerRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.services.PlayerService;
@@ -31,6 +33,13 @@ public class PlayerServiceImpl implements PlayerService {
     //TODO verify player exists or not
     @Override
     public PlayerDTO save(PlayerDTO player) {
+        String playerName = player.getPlayerName();
+        if (playerName == null) {
+            player.setPlayerName(PlayerUtils.DEFAULT_NAME);
+        }
+        else if (playerRepository.findByPlayerName(playerName).isPresent()) {
+            throw new EntityAlreadyExistsException("Player name already in use");
+        }
         player.setCreationDate(LocalDate.now());
         return entityToDTO(
                 playerRepository.save(
@@ -80,7 +89,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         //TODO Handle empty game list differently?
         if (games.isEmpty()) {
-            throw new EmptyPlayerListException("No players registered yet.");
+            average = 0;
         } else {
             average = games.stream().filter(GameEntity::validateVictory).count();
             average /= games.size();
