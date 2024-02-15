@@ -38,9 +38,6 @@ public class GameServiceUnitTest {
     @InjectMocks
     private GameServiceImpl gameService;
 
-    private GameDTO gameDTO;
-    private GameEntity gameEntity;
-
     private PlayerEntity playerEntity;
     @BeforeEach
     void setUp() {
@@ -48,19 +45,18 @@ public class GameServiceUnitTest {
                 .id(1)
                 .playerName("Player 1")
                 .creationDate(Date.valueOf(LocalDate.of(1111, 11, 11))).build();
-        gameDTO = GameDTO.builder().id(1).playerId(1).die1(3).die2(4).victory(true).build();
-        gameEntity = GameEntity.builder().id(1).die1(3).die2(4).player(playerEntity).build();
     }
     @AfterEach
     void reset() {
-        gameDTO = null;
-        gameEntity = null;
         playerEntity = null;
     }
 
     @DisplayName("GameServiceUnitTest - playGame inserts new game")
     @Test
     void playGame_should_insert_new_game() {
+        GameEntity gameEntity;
+        GameDTO gameDTO;
+
         when(gameRepository.save(any(GameEntity.class))).thenAnswer(i -> i.getArguments()[0]);
         when(playerRepository.findById(1)).thenReturn(Optional.of(playerEntity));
 
@@ -85,10 +81,11 @@ public class GameServiceUnitTest {
     @Test
     void getByPlayerId_should_return_list_of_gameDTO() {
         List<GameDTO> games;
+        GameEntity gameEntity1 = GameEntity.builder().id(1).die1(3).die2(4).player(playerEntity).build();
         GameEntity gameEntity2 = GameEntity.builder().id(2).die1(5).die2(4).player(playerEntity).build();
 
         when(playerRepository.findById(1)).thenReturn(Optional.of(playerEntity));
-        when(gameRepository.findByPlayerId(1)).thenReturn(List.of(gameEntity, gameEntity2));
+        when(gameRepository.findByPlayerId(1)).thenReturn(List.of(gameEntity1, gameEntity2));
 
         games = gameService.getByPlayerId(1);
         assertEquals(2, games.size());
