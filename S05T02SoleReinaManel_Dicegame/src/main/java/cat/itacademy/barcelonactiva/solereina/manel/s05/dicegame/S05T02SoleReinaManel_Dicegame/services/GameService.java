@@ -7,7 +7,6 @@ import java.util.List;
 public interface GameService {
     GameDTO playGame(int playerID);
     List<GameDTO> getByPlayerId(int playerID);
-    GameDTO save(GameDTO game);
     void deleteByPlayer(int playerID);
 
 }

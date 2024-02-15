@@ -11,6 +11,7 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.PlayerRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.services.PlayerService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +23,14 @@ import java.util.stream.Collectors;
 @Service
 public class PlayerServiceImpl implements PlayerService {
     @Autowired
-    PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
     @Autowired
-    GameRepository gameRepository;
+    private GameRepository gameRepository;
 
-    @Override
-    public PlayerDTO getById(int id) {
-        return entityToDTO(playerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Id not found.")));
-    }
-    //TODO verify player exists or not
     @Override
     public PlayerDTO save(PlayerDTO player) {
         String playerName = player.getPlayerName();
-        if (playerName == null) {
+        if (playerName == null || playerName.equals(PlayerUtils.DEFAULT_NAME)) {
             player.setPlayerName(PlayerUtils.DEFAULT_NAME);
         }
         else if (playerRepository.findByPlayerName(playerName).isPresent()) {
@@ -53,6 +49,12 @@ public class PlayerServiceImpl implements PlayerService {
                 playerRepository.save(
                         dtoToEntity(player)));
     }
+
+    @Override
+    public PlayerDTO getById(int id) {
+        return entityToDTO(playerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Id not found.")));
+    }
+
     @Override
     public List<PlayerDTO> getAll() {
         return playerRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toList());
@@ -87,7 +89,6 @@ public class PlayerServiceImpl implements PlayerService {
         double average;
         List<GameEntity> games = gameRepository.findByPlayerId(playerId);
 
-        //TODO Handle empty game list differently?
         if (games.isEmpty()) {
             average = 0;
         } else {
@@ -101,6 +102,7 @@ public class PlayerServiceImpl implements PlayerService {
         //TODO fix
         //TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
         //propertyMapper.addMapping(player -> getPlayerAverage(player.getId()), PlayerDTO::setVictoryRate);
+        //propertyMapper.addMapping(player -> player.getCreationDate().toLocalDate(), PlayerDTO::setCreationDate);
         PlayerDTO dto = new PlayerDTO();
 
         mapper.map(entity, dto);

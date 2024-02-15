@@ -2,15 +2,14 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "games")
 public class GameEntity {

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class GameServiceImpl implements GameService {
     @Autowired
-    private GameRepository gameRepository;
+    private GameRepository gameRepository; //TODO Consider @RequiredArgsConstructor
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -33,13 +33,10 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<GameDTO> getByPlayerId(int playerId) {
+        playerRepository.findById(playerId).orElseThrow(() -> new EntityNotFoundException("Id not found."));
         return gameRepository.findByPlayerId(playerId).stream().map(this::entityToDTO).collect(Collectors.toList());
     }
-    @Override
-    public GameDTO save(GameDTO dto) {
-        GameEntity entity = dtoToEntity(dto);
-        return entityToDTO(gameRepository.save(entity));
-    }
+
     @Transactional
     @Override
     public void deleteByPlayer(int playerID) {
