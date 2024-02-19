@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class GameServiceImpl implements GameService {
     @Autowired
-    private GameRepository gameRepository; //TODO Consider @RequiredArgsConstructor
+    private GameRepository gameRepository;
 
     @Autowired
     private PlayerRepository playerRepository;

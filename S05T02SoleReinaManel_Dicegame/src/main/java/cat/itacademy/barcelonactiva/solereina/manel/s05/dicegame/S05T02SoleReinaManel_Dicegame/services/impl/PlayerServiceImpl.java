@@ -85,7 +85,7 @@ public class PlayerServiceImpl implements PlayerService {
         return players.stream().max(Comparator.comparingDouble(PlayerDTO::getVictoryRate)).orElseThrow(() -> new EmptyPlayerListException("No players registered yet."));
     }
 
-    private double getPlayerAverage(int playerId) { //TODO Dirty. Repeated code from GameService. Multiple calls. Fix with two-way OneToMany-ManyToOne?
+    private double getPlayerAverage(int playerId) { //TODO Reduce to single call?
         double average;
         List<GameEntity> games = gameRepository.findByPlayerId(playerId);
 
