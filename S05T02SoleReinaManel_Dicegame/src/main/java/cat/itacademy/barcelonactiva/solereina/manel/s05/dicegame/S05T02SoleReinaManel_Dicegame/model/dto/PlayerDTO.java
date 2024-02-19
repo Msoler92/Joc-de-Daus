@@ -3,7 +3,6 @@ package cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleRein
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
