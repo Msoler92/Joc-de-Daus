@@ -10,8 +10,7 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.GameRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.PlayerRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.services.PlayerService;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
+import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,16 +97,16 @@ public class PlayerServiceImpl implements PlayerService {
         return average;
     }
     private PlayerDTO entityToDTO(PlayerEntity entity) {
-        ModelMapper mapper = new ModelMapper();
-        //TODO fix
-        //TypeMap<PlayerEntity, PlayerDTO> propertyMapper = mapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
-        //propertyMapper.addMapping(player -> getPlayerAverage(player.getId()), PlayerDTO::setVictoryRate);
-        //propertyMapper.addMapping(player -> player.getCreationDate().toLocalDate(), PlayerDTO::setCreationDate);
+        ModelMapper modelMapper = new ModelMapper();
+        Converter<Date, LocalDate> toLocalDate = ctx -> ctx.getSource() == null ? null : ctx.getSource().toLocalDate();
+        Converter<Integer, Double> playerAverage = ctx -> ctx.getSource() == null ? null: getPlayerAverage(ctx.getSource());
+        TypeMap<PlayerEntity, PlayerDTO> propertyMapper = modelMapper.createTypeMap(PlayerEntity.class, PlayerDTO.class);
         PlayerDTO dto = new PlayerDTO();
 
-        mapper.map(entity, dto);
-        dto.setCreationDate(entity.getCreationDate().toLocalDate());
-        dto.setVictoryRate(getPlayerAverage(entity.getId())); //TODO remove when above is fixed
+        propertyMapper.addMappings(mapper -> mapper.using(playerAverage).map(PlayerEntity::getId, PlayerDTO::setVictoryRate));
+        propertyMapper.addMappings(mapper -> mapper.using(toLocalDate).map(PlayerEntity::getCreationDate, PlayerDTO::setCreationDate));
+
+        propertyMapper.map(entity, dto);
         return dto;
     }
 

@@ -8,10 +8,14 @@ import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReina
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.repositories.PlayerRepository;
 import cat.itacademy.barcelonactiva.solereina.manel.s05.dicegame.S05T02SoleReinaManel_Dicegame.services.GameService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,13 +47,14 @@ public class GameServiceImpl implements GameService {
         gameRepository.deleteByPlayerId(playerID);
     }
 
-    //TODO fix
     private GameDTO entityToDTO(GameEntity entity) {
-        ModelMapper mapper = new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        Converter<GameEntity, Boolean> victoryCondition = ctx -> ctx.getSource() == null ? null : ctx.getSource().getDie1() + ctx.getSource().getDie2() == 7;
         GameDTO dto = new GameDTO();
+        TypeMap<GameEntity, GameDTO> propertyMapper = modelMapper.createTypeMap(GameEntity.class, GameDTO.class);
 
-        mapper.map(entity, dto);
-        dto.setVictory(entity.getDie1() + entity.getDie2() == 7); //TODO temporary working solution. Use TypeMapper.
+        propertyMapper.addMappings(mapper -> mapper.using(victoryCondition).map(game -> game, GameDTO::setVictory));
+        propertyMapper.map(entity, dto);
         return dto;
     }
     private GameEntity dtoToEntity(GameDTO dto) {
