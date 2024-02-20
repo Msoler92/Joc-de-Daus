@@ -111,11 +111,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private PlayerEntity dtoToEntity(PlayerDTO dto) {
-        ModelMapper mapper = new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
         PlayerEntity entity = new PlayerEntity();
+        Converter<LocalDate, Date> toLocalDate = ctx -> ctx.getSource() == null ? null : Date.valueOf(ctx.getSource());
+        TypeMap<PlayerDTO, PlayerEntity> propertyMapper = modelMapper.createTypeMap(PlayerDTO.class, PlayerEntity.class);
 
-        mapper.map(dto, entity);
-        entity.setCreationDate(Date.valueOf(dto.getCreationDate()));
+        propertyMapper.addMappings(mapper -> mapper.using(toLocalDate).map(PlayerDTO::getCreationDate, PlayerEntity::setCreationDate));
+        propertyMapper.map(dto, entity);
         return entity;
     }
 }
