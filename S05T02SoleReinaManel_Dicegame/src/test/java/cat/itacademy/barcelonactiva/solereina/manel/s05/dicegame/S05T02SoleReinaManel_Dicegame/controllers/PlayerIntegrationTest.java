@@ -14,7 +14,6 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -35,17 +34,18 @@ public class PlayerIntegrationTest {
     @BeforeEach
     void reset(@Autowired JdbcTemplate jdbcTemplate) {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "players");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "games");
 
-        jdbcTemplate.execute("INSERT INTO players VALUES (1, '" + LocalDate.now() + "', 'Player 1');");
-        jdbcTemplate.execute("INSERT INTO players VALUES (2, '" + LocalDate.now() + "', 'Player 2');");
-        jdbcTemplate.execute("INSERT INTO players VALUES (3, '" + LocalDate.now() + "', 'Player 3');");
+        jdbcTemplate.execute("INSERT INTO players (id, creation_date, player_name) VALUES (1, '" + LocalDate.now() + "', 'Player 1');");
+        jdbcTemplate.execute("INSERT INTO players (id, creation_date, player_name) VALUES (2, '" + LocalDate.now() + "', 'Player 2');");
+        jdbcTemplate.execute("INSERT INTO players (id, creation_date, player_name) VALUES (3, '" + LocalDate.now() + "', 'Player 3');");
 
-        jdbcTemplate.execute("INSERT INTO games VALUES (1, 3, 4, 1);");
-        jdbcTemplate.execute("INSERT INTO games VALUES (2, 2, 2, 1);");
-        jdbcTemplate.execute("INSERT INTO games VALUES (3, 2, 5, 2);");
-        jdbcTemplate.execute("INSERT INTO games VALUES (4, 1, 6, 2);");
-        jdbcTemplate.execute("INSERT INTO games VALUES (5, 1, 2, 3);");
-        jdbcTemplate.execute("INSERT INTO games VALUES (6, 5, 5, 3);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (1, 3, 4, 1);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (2, 2, 2, 1);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (3, 2, 5, 2);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (4, 1, 6, 2);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (5, 1, 2, 3);");
+        jdbcTemplate.execute("INSERT INTO games (id, die_one, die_two, player_id) VALUES (6, 5, 5, 3);");
     }
 
     @DisplayName("PlayerControllerIntegrationTest - createPlayer inserts new player")

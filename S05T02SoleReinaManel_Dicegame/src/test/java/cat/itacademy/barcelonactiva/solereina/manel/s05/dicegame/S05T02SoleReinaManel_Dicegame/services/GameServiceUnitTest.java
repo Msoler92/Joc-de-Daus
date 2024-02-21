@@ -101,8 +101,17 @@ public class GameServiceUnitTest {
     @DisplayName("GameServiceUnitTest - deleteByPlayer deletes games belonging to that player")
     @Test
     void deleteByPlayer_should_delete_games() {
+        when(playerRepository.findById(1)).thenReturn(Optional.of(playerEntity));
         gameService.deleteByPlayer(1);
         verify(gameRepository).deleteByPlayerId(1);
+    }
+
+    @DisplayName("GameServiceUnitTest - deleteByPlayer throws exception if player cannot be found")
+    @Test
+    void deleteByPlayer_should_throw_exception_if_player_does_not_exist() {
+        when(playerRepository.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> gameService.deleteByPlayer(1));
     }
 
 
