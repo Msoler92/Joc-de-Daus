@@ -14,8 +14,6 @@ import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +42,7 @@ public class GameServiceImpl implements GameService {
     @Transactional
     @Override
     public void deleteByPlayer(int playerID) {
+        playerRepository.findById(playerID).orElseThrow(() -> new EntityNotFoundException("Id not found."));
         gameRepository.deleteByPlayerId(playerID);
     }
 
